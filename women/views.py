@@ -4,14 +4,9 @@ from django.views.generic import ListView, DetailView
 
 from .forms import *
 from .models import *
+from .utils import *
 
-menu = [{'title': "О сайте", 'url_name': 'about'},
-        {'title': "Добавить статью", 'url_name': 'add_page'},
-        {'title': "Обратная связь", 'url_name': 'contact'},
-        {'title': "Войти", 'url_name': 'login'}
-]
-
-class HeroHome(ListView):
+class HeroHome(DataMixin, ListView):
     model = Women
     template_name = 'women/index.html'
     context_object_name = 'posts'
@@ -19,13 +14,14 @@ class HeroHome(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['menu'] = menu
-        context['title'] = 'Главная страница'
-        context['cat_selected'] = 0
+        c_def = self.get_user_context(title="Главная страница")
+        context = dict(list(context.items()) + list(c_def.items()))
         return context
 
     def get_queryset(self):
         return Women.objects.filter(is_published=True)
+
+
 
 
 #def index(request):
@@ -70,18 +66,20 @@ def pageNotFound(request, exception):
     return HttpResponseNotFound('<h1>Страница не найдена</h1>')
 
 def show_post(request, post_slug):
-    post = get_object_or_404(Women, slug=post_slug)
+   post = get_object_or_404(Women, slug=post_slug)
 
-    context = {
-        'post': post,
-        'menu': menu,
-        'title': post.title,
-        'cat_selected': post.cat_id,
-    }
+   context = {
+      'post': post,
+     'menu': menu,
+    'title': post.title,
+    'cat_selected': post.cat_id,
+}
 
-    return render(request, 'women/post.html', context=context)
+   return render(request, 'women/post.html', context=context)
 
-class HeroCategory(ListView):
+
+
+class HeroCategory(DataMixin, ListView):
     model = Women
     template_name = 'women/index.html'
     context_object_name = 'posts'
@@ -92,9 +90,8 @@ class HeroCategory(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Категория -' + str(context['posts'][0].cat)
-        context['menu'] = menu
-        context['cat_selected'] = context['posts'][0].cat_id
+        c_def = self.get_user_context(title='Категория - ' + str(context['posts'][0].cat),
+                                      cat_selected=context['posts'][0].cat_id)
         return context
 
 #def show_category(request, cat_id):
