@@ -1,6 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import *
 from .models import *
@@ -40,20 +41,31 @@ def about(request):
     return render(request, 'women/about.html', {'menu': menu, 'title': 'О сайте'})
 
 
-def addpage(request):
-    if request.method == 'POST':
-        form = AddPostForm(request.POST, request.FILES)
-        if form.is_valid():
-            #print(form.cleaned_data)
-            try:
-                form.save()
-                return redirect('home')
-            except:
-                form.add_error(None, 'Ошибка добавления поста')
+class AddPage(LoginRequiredMixin, DataMixin, CreateView):
+    form_class = AddPostForm
+    template_name = 'women/addpage.html'
 
-    else:
-        form = AddPostForm()
-    return render(request, 'women/addpage.html', {'form': form, 'menu': menu, 'title': 'Добавление статьи'})
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title="Добавление статьи")
+        return dict(list(context.items()) + list(c_def.items()))
+
+
+#def addpage(request):
+ #   if request.method == 'POST':
+  #      form = AddPostForm(request.POST, request.FILES)
+   #     if form.is_valid():
+    #        #print(form.cleaned_data)
+     #       try:
+      #          form.save()
+       #         return redirect('home')
+        #    except:
+         #       form.add_error(None, 'Ошибка добавления поста')
+#
+ #   else:
+  #      form = AddPostForm()
+   # return render(request, 'women/addpage.html', {'form': form, 'menu': menu, 'title': 'Добавление статьи'})
+
 
 def contact(request):
     return HttpResponse("Обратная связь")
@@ -72,7 +84,7 @@ def show_post(request, post_slug):
       'post': post,
      'menu': menu,
     'title': post.title,
-    'cat_selected': post.cat_id,
+   'cat_selected': post.cat_id,
 }
 
    return render(request, 'women/post.html', context=context)
