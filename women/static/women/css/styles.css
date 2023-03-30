@@ -4,7 +4,7 @@ html, body {
 	padding: 0;
 	height: 100%;
 	width: 100%;
-	color: #444;
+	color: #666;
 }
 
 a {
@@ -12,7 +12,7 @@ a {
 	text-decoration: none;
 }
 a:hover {
-	color: #CC0000;
+	color: #FFFF00;
 	text-decoration: underline;
 }
 
@@ -30,15 +30,29 @@ img.img-article-left.thumb {
 	height: auto;
 }
 
-p.link-read-post {
-	text-align: right;
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
 }
-p.link-read-post a {
-	padding: 10px;
-	min-width: 100px;
-	background: #333671;
-	color: #fff;
-	text-decoration: none;
+
+.button1 {
+  background-color: white;
+  color: black;
+  border: 2px solid #4CAF50;
+}
+
+.button1:hover {
+  background-color: #4CAF50;
+  color: white;
 }
 
 div.article-panel {
@@ -76,14 +90,13 @@ ul.list-articles li {
 .clear {clear: both;}
 
 .header {
-	background: #3F4137;
+	background: #CC0000;
 	height: 60px;
 }
-
 .logo {
 	background: url('../images/logo.png') no-repeat 10px 5px;
-	width: 70px;
-	height: 60px;
+	width: 50px;
+	height: 20px;
 }
 
 ul.mainmenu {
@@ -107,7 +120,7 @@ ul.mainmenu li a {
 	text-decoration: none;
 }
 ul.mainmenu li a:hover {
-	color: #FDA83D;
+	color: #FF0000;
 }
 
 .panelitems {
@@ -404,13 +417,13 @@ ul.lang-list li a:hover {color: #fdc073;}
 	margin: 0 20px 0 0;
 }
 .list-pages a {
-	color: #000;
+	color: #111;
 	font-size: 24px;
 	text-decoration: none;
 }
 .list-pages .page-num, .page-num-selected {
 	display: inline-block;
-	width: 60px;
+	width: 30px;
 	height: 44px;
 	padding: 16px 0 0 0;
 	border: 1px solid #d0d0d0;
@@ -422,7 +435,7 @@ ul.lang-list li a:hover {color: #fdc073;}
 .list-pages .page-num-selected {
 	border: none;
 	color: #000;
-	font-size: 20px;
+	font-size: 30px;
 }
 .list-pages .page-num-selected:hover {
 	box-shadow: none;
