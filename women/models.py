@@ -18,8 +18,8 @@ class Women(models.Model):
         return reverse('post', kwargs={'post_slug': self.slug})
 
     class Meta:
-        verbose_name = 'Известные женщины'
-        verbose_name_plural = 'Известные женщины'
+        verbose_name = 'Известные пероснажи'
+        verbose_name_plural = 'Известные персонажи'
         ordering = ['-time_create', 'title']
 
 
