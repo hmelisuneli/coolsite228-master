@@ -32,17 +32,17 @@ class HeroHome(DataMixin, ListView):
 
 
 
-#def index(request):
-#   posts = Women.objects.all()
-#
-#   context = {
-#       'posts': posts,
-#      'menu': menu,
-#       'title': 'Главная страница',
- #       'cat_selected': 0,
- #   }
-#
-#   return render(request, 'women/index.html', context=context)
+def index(request):
+  posts = Women.objects.all()
+
+  context = {
+      'posts': posts,
+     'menu': menu,
+      'title': 'Главная страница',
+       'cat_selected': 0,
+   }
+
+  return render(request, 'women/marvel.html', context=context)
 
 def about(request):
     contact_list = Women.objects.all()
@@ -129,9 +129,10 @@ class HeroCategory(DataMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Категория - ' + str(context['posts'][0].cat),
-                                      cat_selected=context['posts'][0].cat_id)
-        return context
+        c=Category.objects.get(slug=self.kwargs['cat_slug'])
+        c_def = self.get_user_context(title='Категория - ' + str(c.name),
+                                      cat_selected=c.pk)
+        return dict(list(context.items())+list(c_def.items()))
 
 #def show_category(request, cat_id):
 #    posts = Women.objects.filter(cat_id=cat_id)

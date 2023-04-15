@@ -4,8 +4,9 @@ from django.views.decorators.cache import cache_page
 from .views import *
 
 urlpatterns = [
-    path('', cache_page(60)(HeroHome.as_view()), name='home'),
+    path('home/', cache_page(60)(HeroHome.as_view()), name='home'),
     path('about/', about, name='about'),
+    path('', index, name='marvel'),
     path('addpage/', AddPage.as_view(), name='add_page'),
     path('contact/', ContactFormView.as_view(), name='contact'),
     path('login/', LoginUser.as_view(), name='login'),
