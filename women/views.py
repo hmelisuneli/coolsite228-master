@@ -6,6 +6,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect, HttpResponseNotFound
+
 
 from .forms import *
 from .models import *
@@ -149,12 +151,14 @@ class HeroCategory(DataMixin, ListView):
 class RegisterUser(DataMixin, CreateView):
     form_class = UserCreationForm
     template_name = 'women/register.html'
-    success_url = reverse_lazy('login/')
+    success_url = reverse_lazy('login')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title="Регистрация")
         return dict(list(context.items()) + list(c_def.items()))
+
+
 
 class LoginUser(DataMixin, LoginView):
     form_class = AuthenticationForm
@@ -167,3 +171,44 @@ class LoginUser(DataMixin, LoginView):
 
     def get_success_url(self):
         return reverse_lazy('home')
+
+class Person(models.Model):
+    name = models.CharField(max_length=20)
+    age = models.IntegerField()
+
+    def index(request):
+        people = Women.objects.all()
+        return render(request, "index.html", {"people": people})
+
+    # сохранение данных в бд
+    def create(request):
+        if request.method == "POST":
+            person = Women()
+            person.name = request.POST.get("name")
+            person.age = request.POST.get("age")
+            person.save()
+        return HttpResponseRedirect("/")
+
+    # изменение данных в бд
+    def edit(request, id):
+        try:
+            person = Women.objects.get(id=id)
+
+            if request.method == "POST":
+                person.name = request.POST.get("name")
+                person.age = request.POST.get("age")
+                person.save()
+                return HttpResponseRedirect("/")
+            else:
+                return render(request, "edit.html", {"person": person})
+        except Person.DoesNotExist:
+            return HttpResponseNotFound("<h2>Person not found</h2>")
+
+    # удаление данных из бд
+    def delete(request, id):
+        try:
+            person = Person.objects.get(id=id)
+            person.delete()
+            return HttpResponseRedirect("/")
+        except Person.DoesNotExist:
+            return HttpResponseNotFound("<h2>Person not found</h2>")

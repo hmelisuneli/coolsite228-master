@@ -1,5 +1,7 @@
 from django.db import models
+from django.db.models import IntegerField
 from django.urls import reverse
+
 
 class Women(models.Model):
     title = models.CharField(max_length=255, verbose_name="Заголовок")
@@ -37,3 +39,5 @@ class Category(models.Model):
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
         ordering = ['id']
+
+

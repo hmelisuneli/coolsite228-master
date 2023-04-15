@@ -12,4 +12,5 @@ urlpatterns = [
     path('register/', RegisterUser.as_view(), name='register'),
     path('post/<slug:post_slug>/', show_post, name='post'),
     path('category/<slug:cat_slug>/', HeroCategory.as_view(), name='category'),
+    path('crud/', Person, name='crud'),
 ]
