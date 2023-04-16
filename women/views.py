@@ -220,17 +220,31 @@ class Person(models.Model):
 
 class HeroAPIView(APIView):
     def get(self, requset):
-        lst = Women.objects.all().values()
-        return Response({'posts': list(lst)})
+        w = Women.objects.all()
+        return Response({'posts': HeroSerializer(w, many=True).data})
 
     def post(self, requset):
-        post_new =Women.oblects.create(
-            title=requset.data['title'],
-            content=requset.data['content'],
-            cat_id=requset.data['cat_id']
-        )
+        serializer = HeroSerializer(data=requset.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-        return Response({'post': model_to_dict(post_new)})
+        return Response({'post': serializer.data})
+
+    def put(self, request, *args, **kwargs):
+      pk = kwargs.get("pk", None)
+      if not pk:
+            return  Response({"error": "Method PUT not allowed"})
+
+      try:
+            instance = Women.obects.get(pk=pk)
+      except:
+            return Response({"error": "Object does not exist"})
+
+      serializer = HeroSerializer(data=request.data, instance=instance)
+      serializer.is_valid(raise_exception=True)
+      serializer.save()
+      return Response({"post": serializer.data})
+
 
 # class HeroAPIView(generics.ListAPIView):
 #     queryset = Women.objects.all()

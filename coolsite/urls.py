@@ -25,7 +25,8 @@ urlpatterns = [
     path('addpage/', admin.site.urls),
     path('captcha/', include('captcha.urls')),
     path('', include('women.urls')),
-    path('api/v1/womenlist/', HeroAPIView.as_view())
+    path('api/v1/herolist/', HeroAPIView.as_view()),
+    path('api/v1/herolist/<int:pk>/', HeroAPIView.as_view()),
 ]
 
 if settings.DEBUG:
