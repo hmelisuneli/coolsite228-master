@@ -1,3 +1,5 @@
+from django.forms import model_to_dict
+from rest_framework import generics
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import LoginView
 from django.core.paginator import Paginator
@@ -7,10 +9,12 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, HttpResponseNotFound
-
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .forms import *
 from .models import *
+from .serializer import HeroSerializer
 from .utils import *
 
 class HeroHome(DataMixin, ListView):
@@ -213,3 +217,21 @@ class Person(models.Model):
             return HttpResponseRedirect("/")
         except Person.DoesNotExist:
             return HttpResponseNotFound("<h2>Person not found</h2>")
+
+class HeroAPIView(APIView):
+    def get(self, requset):
+        lst = Women.objects.all().values()
+        return Response({'posts': list(lst)})
+
+    def post(self, requset):
+        post_new =Women.oblects.create(
+            title=requset.data['title'],
+            content=requset.data['content'],
+            cat_id=requset.data['cat_id']
+        )
+
+        return Response({'post': model_to_dict(post_new)})
+
+# class HeroAPIView(generics.ListAPIView):
+#     queryset = Women.objects.all()
+#     serializer_class = HeroSerializer
