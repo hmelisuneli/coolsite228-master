@@ -1,5 +1,5 @@
 from django.forms import model_to_dict
-from rest_framework import generics
+from rest_framework import generics, viewsets, mixins
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import LoginView
 from django.core.paginator import Paginator
@@ -9,11 +9,15 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, HttpResponseNotFound
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import GenericViewSet
 
 from .forms import *
 from .models import *
+from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 from .serializer import HeroSerializer
 from .utils import *
 
@@ -102,7 +106,7 @@ class ContactFormView(DataMixin, FormView):
      def form_valid(self, form):
          print(form.cleaned_data)
          return redirect('home')
-     
+
 
 
 def pageNotFound(request, exception):
@@ -218,46 +222,97 @@ class Person(models.Model):
         except Person.DoesNotExist:
             return HttpResponseNotFound("<h2>Person not found</h2>")
 
-class HeroAPIView(APIView):
-    def get(self, requset):
-        w = Women.objects.all()
-        return Response({'posts': HeroSerializer(w, many=True).data})
 
-    def post(self, requset):
-        serializer = HeroSerializer(data=requset.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+class HeroAPIList(generics.ListCreateAPIView):
+    queryset = Women.objects.all()
+    serializer_class = HeroSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
-        return Response({'post': serializer.data})
 
-    def put(self, request, *args, **kwargs):
-      pk = kwargs.get("pk", None)
-      if not pk:
-            return  Response({"error": "Method PUT not allowed"})
+class HeroAPIUpdate(generics.RetrieveUpdateAPIView):
+    queryset = Women.objects.all()
+    serializer_class = HeroSerializer
+    permission_classes = (IsOwnerOrReadOnly, )
 
-      try:
-            instance = Women.obects.get(pk=pk)
-      except:
-            return Response({"error": "Object does not exist"})
+class HeroAPIDestroy(generics.RetrieveDestroyAPIView):
+    queryset = Women.objects.all()
+    serializer_class = HeroSerializer
+    permission_classes = (IsAdminOrReadOnly, )
 
-      serializer = HeroSerializer(data=request.data, instance=instance)
-      serializer.is_valid(raise_exception=True)
-      serializer.save()
-      return Response({"post": serializer.data})
 
-    def delete(self, request, *args, **kwargs):
-        pk = kwargs.get("pk", None)
-        if not pk:
-            return Response({"error": "Method DELETE not allowed"})
+#class HeroViewSet(mixins.CreateModelMixin,mixins.RetrieveModelMixin,mixins.UpdateModelMixin,mixins.ListModelMixin,mixins.DestroyModelMixin,GenericViewSet):
+ #   # queryset = Women.objects.all()
+  #  serializer_class = HeroSerializer
 
-        try:
-            instance = Women.objects.get(pk=pk)
-        except:
-            return Response({"error": "Object does not exists"})
-        instance.delete()
+#    def get_queryset(self):
+ #       pk =self.kwargs.get("pk")
+#
+ #       if not pk:
+  #          return Women.objects.all()[:3]
+##       return Women.objects.filter(pk=pk)
+  #  @action(methods=['get'], detail=False)
+   # def Categoty(self, request, pk=None):
+    #    cats = Category.objects.all(pk=pk)
+     #   return Response({'cats':[c.name for c in cats]})
 
-        return Response({"post": "delete post " + str(pk)})
 
+
+
+
+
+
+# class HeroAPIList(generics. ListCreateAPIView):
+#     queryset = Women.objects.all()
+#     serializer_class = HeroSerializer
+#
+# class HeroAPIUpdate(generics.UpdateAPIView):
+#     queryset = Women.objects.all()
+#     serializer_class = HeroSerializer
+#
+# class HeroAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Women.objects.all()
+#     serializer_class = HeroSerializer
+
+# class HeroAPIView(APIView):
+#     def get(self, requset):
+#         w = Women.objects.all()
+#         return Response({'posts': HeroSerializer(w, many=True).data})
+#
+#     def post(self, requset):
+#         serializer = HeroSerializer(data=requset.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#
+#         return Response({'post': serializer.data})
+#
+#     def put(self, request, *args, **kwargs):
+#       pk = kwargs.get("pk", None)
+#       if not pk:
+#             return  Response({"error": "Method PUT not allowed"})
+#
+#       try:
+#             instance = Women.obects.get(pk=pk)
+#       except:
+#             return Response({"error": "Object does not exist"})
+#
+#       serializer = HeroSerializer(data=request.data, instance=instance)
+#       serializer.is_valid(raise_exception=True)
+#       serializer.save()
+#       return Response({"post": serializer.data})
+#
+#     def delete(self, request, *args, **kwargs):
+#         pk = kwargs.get("pk", None)
+#         if not pk:
+#             return Response({"error": "Method DELETE not allowed"})
+#
+#         try:
+#             instance = Women.objects.get(pk=pk)
+#         except:
+#             return Response({"error": "Object does not exists"})
+#         instance.delete()
+#
+#         return Response({"post": "delete post " + str(pk)})
+#
 
 # class HeroAPIView(generics.ListAPIView):
 #     queryset = Women.objects.all()

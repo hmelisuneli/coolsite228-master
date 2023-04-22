@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+from rest_framework import routers
 
 from coolsite import settings
 from women.views import *
@@ -25,8 +26,9 @@ urlpatterns = [
     path('addpage/', admin.site.urls),
     path('captcha/', include('captcha.urls')),
     path('', include('women.urls')),
-    path('api/v1/herolist/', HeroAPIView.as_view()),
-    path('api/v1/herolist/<int:pk>/', HeroAPIView.as_view()),
+    path('api/v1/hero/', HeroAPIList.as_view()),
+    path('api/v1/hero/<int:pk>/', HeroAPIUpdate.as_view()),
+    path('api/v1/herodelete/<int:pk>/', HeroAPIDestroy.as_view()),
 ]
 
 if settings.DEBUG:
