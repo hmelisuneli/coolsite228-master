@@ -1,0 +1,11 @@
+asgiref==3.6.0
+Django==4.1.7
+-e git+https://github.com/jazzband/django-debug-toolbar.git@af96d391ca1890f4b62ec1ca7cd597db27fe2464#egg=django_debug_toolbar
+django-ranged-response==0.2.0
+django-simple-captcha==0.5.17
+djangorestframework==3.14.0
+Pillow==9.4.0
+pygame==2.3.0
+pytz==2023.3
+sqlparse==0.4.3
+tzdata==2022.7
