@@ -37,7 +37,7 @@ class HeroSerializer(serializers.ModelSerializer):
     #     instance.cat_id = validated_data.get("cat_id", instance.cat_id)
     #     instance.save()
     #     return instance
-
+    #
 
 
 # def encode():
@@ -53,4 +53,4 @@ class HeroSerializer(serializers.ModelSerializer):
 #     serializers = HeroSerializer(data=data)
 #     serializers.is_valid()
 #     print(serializers.validated_data)
-#
+

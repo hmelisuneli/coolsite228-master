@@ -248,24 +248,24 @@ class HeroAPIDestroy(generics.RetrieveDestroyAPIView):
     permission_classes = (IsAdminOrReadOnly, )
 
 
-#class HeroViewSet(mixins.CreateModelMixin,mixins.RetrieveModelMixin,mixins.UpdateModelMixin,mixins.ListModelMixin,mixins.DestroyModelMixin,GenericViewSet):
- #   # queryset = Women.objects.all()
-  #  serializer_class = HeroSerializer
-
-#    def get_queryset(self):
- #       pk =self.kwargs.get("pk")
+# class HeroViewSet(mixins.CreateModelMixin,mixins.RetrieveModelMixin,mixins.UpdateModelMixin,mixins.ListModelMixin,mixins.DestroyModelMixin,GenericViewSet):
+#    # queryset = Women.objects.all()
+#    serializer_class = HeroSerializer
 #
- #       if not pk:
-  #          return Women.objects.all()[:3]
-##       return Women.objects.filter(pk=pk)
-  #  @action(methods=['get'], detail=False)
-   # def Categoty(self, request, pk=None):
-    #    cats = Category.objects.all(pk=pk)
-     #   return Response({'cats':[c.name for c in cats]})
-
-
-
-
+#    def get_queryset(self):
+#        pk =self.kwargs.get("pk")
+#
+#        if not pk:
+#            return Women.objects.all()[:3]
+# #       return Women.objects.filter(pk=pk)
+#    @action(methods=['get'], detail=False)
+#    def Categoty(self, request, pk=None):
+#        cats = Category.objects.all(pk=pk)
+#        return Response({'cats':[c.name for c in cats]})
+#
+#
+#
+#
 
 
 
