@@ -15,20 +15,29 @@ Including another URLconf
 """
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 from rest_framework import routers
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+
+
 
 from coolsite import settings
 from women.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/drf-auth/', include('rest_framework.urls')),
     path('addpage/', admin.site.urls),
     path('captcha/', include('captcha.urls')),
     path('', include('women.urls')),
     path('api/v1/hero/', HeroAPIList.as_view()),
     path('api/v1/hero/<int:pk>/', HeroAPIUpdate.as_view()),
     path('api/v1/herodelete/<int:pk>/', HeroAPIDestroy.as_view()),
+    path('api/v1/auth/', include('djoser.urls')),
+    re_path(r'^auth', include('djoser.urls.authtoken')),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/refresh/', TokenVerifyView.as_view(), name='token_verify'),
 ]
 
 if settings.DEBUG:

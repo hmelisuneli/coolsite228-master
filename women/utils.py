@@ -6,7 +6,6 @@ from django.core.cache import cache
 menu = [{'title': "О сайте", 'url_name': 'about'},
         {'title': "Добавить статью", 'url_name': 'add_page'},
         {'title': "Обратная связь", 'url_name': 'contact'},
-        {'title': "Запись", 'url_name': 'crud'},
 ]
 
 class DataMixin:

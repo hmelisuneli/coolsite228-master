@@ -9,8 +9,10 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, HttpResponseNotFound
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
@@ -223,6 +225,11 @@ class Person(models.Model):
             return HttpResponseNotFound("<h2>Person not found</h2>")
 
 
+class HeroAPIListPagination(PageNumberPagination):
+    page_size = 3
+    page_size_query_param = 'page_size'
+    max_page_size = 3
+
 class HeroAPIList(generics.ListCreateAPIView):
     queryset = Women.objects.all()
     serializer_class = HeroSerializer
@@ -232,7 +239,8 @@ class HeroAPIList(generics.ListCreateAPIView):
 class HeroAPIUpdate(generics.RetrieveUpdateAPIView):
     queryset = Women.objects.all()
     serializer_class = HeroSerializer
-    permission_classes = (IsOwnerOrReadOnly, )
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication,)
 
 class HeroAPIDestroy(generics.RetrieveDestroyAPIView):
     queryset = Women.objects.all()

@@ -104,9 +104,10 @@ ul.mainmenu {
 	margin: 0;
 	padding: 0;
 	height: 60px;
-	color: #fdc073;
+	color: #white;
 	font-size: 20px;
 	overflow: hidden;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 ul.mainmenu li {
 	float: left;
