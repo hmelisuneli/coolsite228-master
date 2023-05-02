@@ -18,17 +18,18 @@ class HeroSerializer(serializers.ModelSerializer):
          model = Women
          fields = "__all__"
 
+    # def create(self, validated_data):
+    #     return Women.objects.create()
 
+        # cat_id = serializers.IntegerField()
     # title = serializers.CharField(max_length=225)
     # content = serializers.CharField()
     # time_create = serializers.DateTimeField(read_only=True)
     # time_update = serializers.DateTimeField(read_only=True)
     # is_published = serializers.BooleanField(default=True)
-    # cat_id = serializers.IntegerField()
+
     #
-    # def create(self, validated_data):
-    #     return Women.objects.create(**validated_data)
-    #
+
     # def update(self, instance, validated_data):
     #     instance.title = validated_data("title", instance.title)
     #     instance.content = validated_data.get("content", instance.content)
