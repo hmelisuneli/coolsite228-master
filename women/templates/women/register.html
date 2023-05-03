@@ -1,0 +1,24 @@
+{% extends 'women/base.html' %}
+
+{% block content %}
+<h1>{{title}}</h1>
+
+<form method="post">
+  <div class="container">
+    <h1></h1>
+    <p>Пожалуйста, заполните эту форму, чтобы создать учетную запись.</p>
+    <hr>
+
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <p>Создавая учетную запись, вы соглашаетесь с нашими<a href="#"></a>.</p>
+    <button type="submit" class="registerbtn">Register</button>
+  </div>
+
+  <div class="container signin">
+    <p>Already have an account? <a href="#">Sign in</a>.</p>
+  </div>
+</form>
+
+{% endblock %}
